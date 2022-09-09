@@ -1,0 +1,38 @@
+.song-item {
+  display: flex;
+  align-items: center;
+  border-radius: var(--border-radius);
+  transition: all ease 300ms;
+
+
+  img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    padding: 0 5px;
+  }
+
+  div {
+    margin: 20px 0;
+    height: 100%;
+    width: 300px;
+  }
+
+  button {
+    width: 75px;
+  }
+}
+
+.track-name {
+  font-weight: bold;
+  margin: 0;
+}
+
+.artist-name {
+  font-size: 12px;
+  margin: 0;
+}
+
+.song-item:hover {
+  background-color: var(--hover-bg-color);
+}

@@ -1,0 +1,106 @@
+
+.form-container {
+  background-color: var(--post-nav-background-color);
+  overflow: hidden;
+  min-width: 400px;
+  max-width: 100%;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+  margin: 0 20px;
+}
+
+#sign-up-page-header {
+  margin-bottom: 25px;
+}
+
+h2 {
+  margin: 0;
+}
+
+.form-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.account-form {
+  padding: 20px 40px;
+}
+
+.form-control {
+  margin-bottom: 10px;
+  padding-bottom: 20px;
+  position: relative;
+}
+
+.form-control label {
+  display: inline-block;
+  margin-bottom: 5px;
+  color: #8A8D91;
+}
+
+.form-control input {
+  border: 1px solid #ccd0d5;
+  border-radius: 4px;
+  display: block;
+  font-family: inherit;
+  width: calc(100% - 12px);
+  padding: 10px 5px;
+  font-size: 14px;
+}
+
+.form-control.success input {
+  border-color: forestgreen;
+}
+
+.form-control.error input {
+  border-color: darkred;
+}
+
+.form-control.success i.fa-check-circle {
+  color: forestgreen;
+  visibility: visible;
+}
+
+.form-control.error i.fa-exclamation-circle {
+  color: darkred;
+  visibility: visible;
+}
+
+.form-control i {
+  visibility: hidden;
+  position: absolute;
+  top: 36px;
+  right: 10px;
+}
+
+.form-control small {
+  color: darkred;
+  visibility: visible;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.form-control.error small {
+  color: darkred;
+  visibility: visible;
+}
+
+
+.form-submit {
+  margin: 10px 0;
+  padding: 10px;
+  width: 100%;
+  display: block;
+  border: 2px solid #1a73e8;
+  border-radius: 4px;
+  background: #1a73e8;
+  color: white;
+}
+
+.form-submit:hover {
+  background-color: #06428f;
+  border-color: #06428f;
+}

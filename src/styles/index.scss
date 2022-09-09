@@ -1,0 +1,106 @@
+// Finding Overscroll culprit!!
+
+//* {
+//  outline: 1px solid #f00 !important;
+//}
+
+:root {
+  --background-color: #fff;
+  --text-color: #121416d8;
+  --link-color: #543fd7;
+
+  --nav-size: 60px;
+  --footer-size: 200px;
+  --border: 1px solid var(--border-color);
+  --border-radius: 8px;
+  --speed: 500ms;
+  --faint-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  background-color: var(--background-color);
+}
+
+[data-theme='light'] {
+  --border-color: #dcdcdc;
+  --hover-bg-color: #d7d5d5;
+  --background-color: #F0F2F5;
+  --input-background-color: #E4E6DB;
+  --post-nav-background-color: #FFFFFF;
+  --text-color: #050505;
+  --text-hidden-color: #65676B;
+}
+
+[data-theme='dark'] {
+  --border-color: #323233;
+  --hover-bg-color: #525357;
+  --background-color: #18191a;
+  --input-background-color: #303031;
+  --post-nav-background-color: #242526;
+  --text-color: #E4E6EB;
+  --text-hidden-color: #B0B3B8;
+  color-scheme: dark;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color);
+  height: 100vh;
+  width: 100vw;
+}
+
+.content {
+  color: var(--text-color);
+  margin-top: var(--nav-size);
+  min-height: calc(100vh - var(--nav-size) - var(--footer-size));
+  width: 100vw;
+  background-color: var(--background-color);
+  display: flex;
+}
+
+body {
+  color: var(--text-color);
+  background-color: var(--background-color);
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+button {
+  border: none;
+  padding: 10px;
+  border-radius: 3px;
+}
+
+button:hover {
+  background-color: var(--hover-bg-color);
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+}
