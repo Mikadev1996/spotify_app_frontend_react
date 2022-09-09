@@ -22,47 +22,6 @@ function Home() {
     const deployUrl = 'https://spotify-playlist-gen-django.azurewebsites.net';
     const prodUrl = 'http://localhost:8000'
 
-    const getUserDetails = () => {
-        const access_token = localStorage.getItem('access_token');
-        const formData = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${access_token}`
-            }
-        }
-        fetch('https://api.spotify.com/v1/me', formData)
-            .then(r => r.json())
-            .then(data => {
-                if (data.error) return setError(data.error.message);
-                setUser(data);
-
-            })
-            .catch(err => console.log(err));
-    }
-
-    const spotifyLogIn = () => {
-        const access_token = localStorage.getItem('access_token');
-        const formData = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${access_token}`
-            }
-        }
-
-        fetch(`${deployUrl}/spotify_playlist_gen/is-authenticated`, formData)
-            .then(r => r.json())
-            .then(data => {
-                if (!data.status) {
-                    fetch(`${deployUrl}/spotify_playlist_gen/get-auth-url`)
-                        .then(r => r.json())
-                        .then(data => window.location.replace(data.url))
-                        .catch(err => console.log(err))
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }
 
     const searchSong = (e) => {
         e.preventDefault()
@@ -126,7 +85,7 @@ function Home() {
 
     return (
         <div className='app' data-theme={theme}>
-            <Nav toggleTheme={toggleTheme} songData={songData} authenticateSpotify={spotifyLogIn} user={user} getUser={getUserDetails}/>
+            <Nav toggleTheme={toggleTheme} songData={songData}/>
 
             <main className='content'>
                 <div className="container">

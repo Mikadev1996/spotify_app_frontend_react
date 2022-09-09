@@ -16,7 +16,7 @@ function Auth() {
                 localStorage.setItem('refresh_token', refresh_token);
             }
 
-            nav('/');
+            nav('/home');
         }
 
         else {

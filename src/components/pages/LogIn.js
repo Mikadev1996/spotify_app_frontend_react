@@ -1,10 +1,65 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import Footer from "../Footer";
 import logo from '../../styles/spotify_white.png'
 
 const LogIn = () => {
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        getUserDetails();
+    }, [])
+
     const nav = useNavigate();
+
+    const deployUrl = 'https://spotify-playlist-gen-django.azurewebsites.net';
+    const prodUrl = 'http://localhost:8000'
+
+    const getUserDetails = () => {
+        const access_token = localStorage.getItem('access_token');
+        const formData = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${access_token}`
+            }
+        }
+
+        fetch('https://api.spotify.com/v1/me', formData)
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) return setError(data.error.message);
+                localStorage.setItem('user', JSON.stringify(data));
+                nav('/home');
+
+            })
+            .catch(err => console.log(err));
+    }
+
+    const spotifyLogIn = () => {
+        console.log("click")
+        const access_token = localStorage.getItem('access_token');
+        const formData = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${access_token}`
+            }
+        }
+
+        fetch(`${deployUrl}/spotify_playlist_gen/is-authenticated`, formData)
+            .then(r => r.json())
+            .then(data => {
+                if (!data.status) {
+                    fetch(`${deployUrl}/spotify_playlist_gen/get-auth-url`)
+                        .then(r => r.json())
+                        .then(data => window.location.replace(data.url))
+                        .catch(err => console.log(err))
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
 
     return (
         <div className='app'>
@@ -19,7 +74,8 @@ const LogIn = () => {
                     <form className='spotify-container'>
                         <div>
 
-                            <button className='form-submit' id='spotify-login' type="submit"><img src={logo} alt='logo'/><p>Log In with Spotify</p></button>
+                        <button onClick={() => spotifyLogIn()} className='form-submit' id='spotify-login' type="submit"><img src={logo} alt='logo'/><p>Log In with Spotify</p></button>
+                            {error && <small>{error}, please log in again</small>}
                         </div>
                     </form>
                 </div>

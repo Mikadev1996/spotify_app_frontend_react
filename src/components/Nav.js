@@ -1,6 +1,6 @@
 import React from "react";
 
-const Nav = ({toggleTheme, authenticateSpotify, user, getUser, songData}) => {
+const Nav = ({toggleTheme, songData}) => {
     return (
         <nav>
             <div className='nav-container'>
@@ -16,8 +16,6 @@ const Nav = ({toggleTheme, authenticateSpotify, user, getUser, songData}) => {
                 </div>
                 <div className='nav-last'>
                     <button onClick={() => console.log(songData)}>Log</button>
-                    <button onClick={() => getUser()}>Get User</button>
-                    {!user && <button onClick={() => authenticateSpotify()}>Log In</button>}
                     <button onClick={toggleTheme}>Toggle Theme</button>
                 </div>
             </div>
