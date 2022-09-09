@@ -1,0 +1,41 @@
+footer {
+  width: 100vw;
+  height: 200px;
+  background-color: var(--post-nav-background-color);
+  color: var(--text-hidden-color);
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+}
+
+.form-header {
+  padding: 10px;
+  background: var(--input-background-color);
+  border-bottom: 1px solid var(--text-hidden-color);
+}
+
+.footer-container ul {
+  display: flex;
+  padding: 10px 0;
+}
+
+.footer-container ul li {
+  margin: 0 5px;
+}
+
+.footer-container ul li:hover {
+  text-decoration: underline;
+}
+
+.language-list {
+  border-bottom: 1px solid #bcbcbd;
+  padding: 10px 0;
+}
+
+#selected-lang {
+  color: #65676B;
+}

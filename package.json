@@ -2,6 +2,7 @@
   "name": "spotify_app_frontend_react",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://spotify-playlist-gen-django.azurewebsites.net",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -9,6 +10,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "sass": "^1.54.9",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -34,5 +36,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-router-dom": "^6.3.0",
+    "use-local-storage": "^2.3.6"
   }
 }

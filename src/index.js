@@ -5,6 +5,8 @@ import './styles/Nav.scss';
 import './styles/Home.scss';
 import './styles/Forms.scss';
 import './styles/SearchSong.scss';
+import './styles/LogIn.scss';
+import './styles/Footer.scss';
 import RouteSwitch from "./RouteSwitch";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React,  { useState } from "react";
 import useLocalStorage from 'use-local-storage'
-import Nav from "./Nav";
-import SearchSong from "./SearchSong";
+import Nav from "../Nav";
+import SearchSong from "../SearchSong";
 
 
 function Home() {
@@ -12,11 +12,15 @@ function Home() {
     const [query, setQuery] = useState('');
     const [queryResults, setQueryResults] = useState([]);
     const [songData, setSongData] = useState(null);
+    const [playlistName, setPlaylistName] = useState('');
 
     const toggleTheme = () => {
         const newTheme = theme === 'light' ? 'dark' : 'light';
         setTheme(newTheme)
     }
+
+    const deployUrl = 'https://spotify-playlist-gen-django.azurewebsites.net';
+    const prodUrl = 'http://localhost:8000'
 
     const getUserDetails = () => {
         const access_token = localStorage.getItem('access_token');
@@ -36,7 +40,7 @@ function Home() {
             .catch(err => console.log(err));
     }
 
-    const authenticateSpotify = () => {
+    const spotifyLogIn = () => {
         const access_token = localStorage.getItem('access_token');
         const formData = {
             headers: {
@@ -45,11 +49,11 @@ function Home() {
             }
         }
 
-        fetch('http://localhost:8000/spotify_playlist_gen/is-authenticated', formData)
+        fetch(`${deployUrl}/spotify_playlist_gen/is-authenticated`, formData)
             .then(r => r.json())
             .then(data => {
                 if (!data.status) {
-                    fetch('http://localhost:8000/spotify_playlist_gen/get-auth-url')
+                    fetch(`${deployUrl}/spotify_playlist_gen/get-auth-url`)
                         .then(r => r.json())
                         .then(data => window.location.replace(data.url))
                         .catch(err => console.log(err))
@@ -77,11 +81,10 @@ function Home() {
         fetch(`https://api.spotify.com/v1/search?q=${searchQuery}&type=track&market=GB&limit=5`, formData)
             .then(r => r.json())
             .then(data => setQueryResults([...data.tracks.items]))
-            // .then(data => console.log(data.tracks.items))
             .catch(err => console.log(err))
     }
 
-    const getTest = (e) => {
+    const generatePlaylist = (e) => {
         e.preventDefault()
         const access_token = localStorage.getItem('access_token');
         const formData = {
@@ -90,15 +93,32 @@ function Home() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                track: "test track",
-                artist: "test artist",
-                playlist_name: "123455",
+                track_id: songData.id,
+                track_name: songData.name,
+                artist_id: songData.artists[0].id,
+                artist_name: songData.artists[0].name,
+                playlist_name: playlistName ? playlistName : `Playlist generated based on ${songData.name} by ${songData.artists[0].name}`,
                 token: access_token,
                 user_id: user.id
             })
         }
 
-        fetch('http://localhost:8000/spotify_playlist_gen/generate', formData)
+        fetch(`${deployUrl}/spotify_playlist_gen/generate`, formData)
+            .then(r => r.json())
+            .then(data => displayPlaylist(data))
+            .catch(err => console.log(err));
+    }
+
+    const displayPlaylist = (data) => {
+        const access_token = localStorage.getItem('access_token');
+        const formData = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${access_token}`
+            }
+        }
+
+        fetch(`https://api.spotify.com/v1/playlists/${data.playlist_id}`, formData)
             .then(r => r.json())
             .then(data => console.log(data))
             .catch(err => console.log(err));
@@ -106,7 +126,7 @@ function Home() {
 
     return (
         <div className='app' data-theme={theme}>
-            <Nav toggleTheme={toggleTheme} songData={songData} authenticateSpotify={authenticateSpotify} user={user} getUser={getUserDetails}/>
+            <Nav toggleTheme={toggleTheme} songData={songData} authenticateSpotify={spotifyLogIn} user={user} getUser={getUserDetails}/>
 
             <main className='content'>
                 <div className="container">
@@ -125,7 +145,7 @@ function Home() {
                             </div>
                             {songData &&
                             <div>
-                                <button onClick={e => getTest(e)} id='generate-playlist-button' className='form-submit' type="submit">Generate playlist from selected song</button>
+                                <button onClick={e => generatePlaylist(e)} id='generate-playlist-button' className='form-submit' type="submit">Generate playlist from selected song</button>
                             </div>}
                         </form>
                     </div>

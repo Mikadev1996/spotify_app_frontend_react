@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 function Auth() {
     const { access_token } = useParams()
     const { refresh_token } = useParams()
-    const [spotifyAuthenticated, setSpotifyAuthenticated] = useState(false);
     const [error , setError] = useState(false);
     const nav = useNavigate();
 

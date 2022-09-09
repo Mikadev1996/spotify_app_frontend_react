@@ -1,0 +1,71 @@
+
+.account-content {
+  min-height: calc(100vh - 200px);
+  width: 100vw;
+  background-color: #F0F2F5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 40px;
+}
+
+.title-container h1 {
+  color: var(--spotify-green);
+  margin: 0;
+  font-size: 48px;
+  font-family: Tahoma, "Segoe UI", sans-serif;
+  max-width: 500px;
+}
+
+.title-container p {
+  font-size: 24px;
+  max-width: 500px;
+}
+
+.create-new-container {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding: 10px;
+  margin: 10px;
+}
+
+.create-new-container a {
+  margin: 0;
+  width: 200px;
+  padding: 10px;
+}
+
+.spotify-container {
+  padding: 20px 40px;
+
+  button {
+    background-color: var(--spotify-green);
+    border-color: var(--spotify-green);
+  }
+
+  button:hover {
+    background-color: #0b6029;
+    border-color: #0b6029;
+  }
+}
+
+#spotify-login {
+  display: flex;
+  align-items: center;
+  p {
+    margin: 0;
+    width: calc(100% - 25px);
+  }
+
+  img {
+    width: 25px;
+    height: 25px;
+  }
+}
