@@ -54,15 +54,6 @@ html {
   width: 100vw;
 }
 
-.content {
-  color: var(--text-color);
-  margin-top: var(--nav-size);
-  min-height: calc(100vh - var(--nav-size) - var(--footer-size));
-  width: 100vw;
-  background-color: var(--background-color);
-  display: flex;
-}
-
 body {
   color: var(--text-color);
   background-color: var(--background-color);

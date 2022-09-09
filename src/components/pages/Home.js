@@ -1,27 +1,37 @@
-import React,  { useState } from "react";
+import React,  { useState, useEffect } from "react";
 import useLocalStorage from 'use-local-storage'
+import {useNavigate} from "react-router-dom";
 import Nav from "../Nav";
 import SearchSong from "../SearchSong";
-
 
 function Home() {
     const defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     const [theme, setTheme] = useLocalStorage('theme', defaultDark ? 'dark' : 'light');
-    const [error, setError] = useState(false);
     const [user, setUser] = useState(null);
     const [query, setQuery] = useState('');
     const [queryResults, setQueryResults] = useState([]);
     const [songData, setSongData] = useState(null);
     const [playlistName, setPlaylistName] = useState('');
+    const [playlistData, setPlaylistData] = useState('');
+
+    const nav = useNavigate();
+    const deployUrl = 'https://spotify-playlist-gen-django.azurewebsites.net';
+    const prodUrl = 'http://localhost:8000'
+
+    useEffect(() => {
+        getUserDetails();
+        displayPlaylist();
+    }, [])
 
     const toggleTheme = () => {
         const newTheme = theme === 'light' ? 'dark' : 'light';
         setTheme(newTheme)
     }
 
-    const deployUrl = 'https://spotify-playlist-gen-django.azurewebsites.net';
-    const prodUrl = 'http://localhost:8000'
-
+    const getUserDetails = () => {
+        const user = localStorage.getItem('user');
+        setUser(JSON.parse(user));
+    }
 
     const searchSong = (e) => {
         e.preventDefault()
@@ -39,7 +49,14 @@ function Home() {
 
         fetch(`https://api.spotify.com/v1/search?q=${searchQuery}&type=track&market=GB&limit=5`, formData)
             .then(r => r.json())
-            .then(data => setQueryResults([...data.tracks.items]))
+            .then(data => {
+                if (data.error) {
+                    localStorage.removeItem('access_token');
+                    nav('/');
+                    return;
+                }
+                setQueryResults([...data.tracks.items])
+            })
             .catch(err => console.log(err))
     }
 
@@ -77,10 +94,25 @@ function Home() {
             }
         }
 
-        fetch(`https://api.spotify.com/v1/playlists/${data.playlist_id}`, formData)
+
+
+        // fetch(`https://api.spotify.com/v1/playlists/${data.playlist_id}`, formData)
+        fetch(`https://api.spotify.com/v1/playlists/6n04zSmMdWaFyMbOG92t3p`, formData)
             .then(r => r.json())
-            .then(data => console.log(data))
+            .then(data => setPlaylistData(data))
             .catch(err => console.log(err));
+    }
+
+    const PlaylistItem = ({id, image_url, track_name, artist_name, playlist_url}) => {
+        return (
+            <div key={id} className='song-item'>
+                <img src={image_url} alt='song cover'/>
+                <div>
+                    <p className='track-name'>{track_name}</p>
+                    <p className='artist-name'>{artist_name}</p>
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -89,6 +121,13 @@ function Home() {
 
             <main className='content'>
                 <div className="container">
+
+                    {user &&
+                    <div className='profile-container'>
+                        <img src={user.images[0].url} alt='profile'/>
+                        <p>Welcome, {user.display_name}!</p>
+                    </div>
+                    }
 
                     <div className='form-container'>
                         <form className='account-form'>
@@ -109,12 +148,23 @@ function Home() {
                         </form>
                     </div>
 
-                    {user &&
-                    <div className='profile-container'>
-                        <h1>Welcome, {user.display_name}!</h1>
-                        <img src={user.images[0].url} alt='profile'/>
-                    </div>
-                    }
+                    {playlistData && <div className='form-container'>
+                        <div className="form-header">
+                            <h1>Your playlist!</h1>
+                            <a href={playlistData.external_urls.spotify}> <p>Visit your Playlist Here!</p></a>
+                        </div>
+                        <form className='account-form'>
+                            {playlistData.tracks.items.map(data => {
+                                return (
+                                    <PlaylistItem id={data.id}
+                                                  image_url={data.track.album.images[1].url}
+                                                  artist_name={data.track.artists[0].name}
+                                                  track_name={data.track.name}
+                                                  key={data.track.id}/>
+                                )
+                            })}
+                        </form>
+                    </div>}
 
                 </div>
             </main>

@@ -35,31 +35,14 @@ const LogIn = () => {
             .catch(err => console.log(err));
     }
 
-    const spotifyLogIn = () => {
-        console.log("click")
-        const access_token = localStorage.getItem('access_token');
-        const formData = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${access_token}`
-            }
-        }
-
-        fetch(`${deployUrl}/spotify_playlist_gen/is-authenticated`, formData)
+    const spotifyLogin = (e) => {
+        e.preventDefault();
+    
+        fetch(`${deployUrl}/spotify_playlist_gen/get-auth-url`)
             .then(r => r.json())
-            .then(data => {
-                if (!data.status) {
-                    fetch(`${deployUrl}/spotify_playlist_gen/get-auth-url`)
-                        .then(r => r.json())
-                        .then(data => window.location.replace(data.url))
-                        .catch(err => console.log(err))
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            })
+            .then(data => window.location.replace(data.url))
+            .catch(err => console.log(err))
     }
-
 
     return (
         <div className='app'>
@@ -74,7 +57,7 @@ const LogIn = () => {
                     <form className='spotify-container'>
                         <div>
 
-                        <button onClick={() => spotifyLogIn()} className='form-submit' id='spotify-login' type="submit"><img src={logo} alt='logo'/><p>Log In with Spotify</p></button>
+                        <button onClick={(e) => spotifyLogin(e)} className='form-submit' id='spotify-login' type="submit"><img src={logo} alt='logo'/><p>Log In with Spotify</p></button>
                             {error && <small>{error}, please log in again</small>}
                         </div>
                     </form>
