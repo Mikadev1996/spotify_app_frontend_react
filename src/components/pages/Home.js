@@ -15,12 +15,11 @@ function Home() {
     const [playlistData, setPlaylistData] = useState('');
 
     const nav = useNavigate();
-    const deployUrl = 'https://spotify-playlist-gen-django.azurewebsites.net';
+    const deployUrl = 'https://spotify-django-app.azurewebsites.net';
     const prodUrl = 'http://localhost:8000'
 
     useEffect(() => {
         getUserDetails();
-        displayPlaylist();
     }, [])
 
     const toggleTheme = () => {
@@ -29,8 +28,25 @@ function Home() {
     }
 
     const getUserDetails = () => {
-        const user = localStorage.getItem('user');
-        setUser(JSON.parse(user));
+        const access_token = localStorage.getItem('access_token');
+        const formData = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${access_token}`
+            }
+        }
+
+        fetch('https://api.spotify.com/v1/me', formData)
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) {
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('refresh_token');
+                    nav('/');
+                }
+                setUser(data);
+            })
+            .catch(err => console.log(err));
     }
 
     const searchSong = (e) => {
@@ -79,13 +95,13 @@ function Home() {
             })
         }
 
-        fetch(`${deployUrl}/spotify_playlist_gen/generate`, formData)
+        fetch(`${deployUrl}/spotify/generate`, formData)
             .then(r => r.json())
-            .then(data => displayPlaylist(data))
+            .then(data => displayPlaylist(data.playlist_id))
             .catch(err => console.log(err));
     }
 
-    const displayPlaylist = (data) => {
+    const displayPlaylist = (id) => {
         const access_token = localStorage.getItem('access_token');
         const formData = {
             headers: {
@@ -96,8 +112,7 @@ function Home() {
 
 
 
-        // fetch(`https://api.spotify.com/v1/playlists/${data.playlist_id}`, formData)
-        fetch(`https://api.spotify.com/v1/playlists/6n04zSmMdWaFyMbOG92t3p`, formData)
+        fetch(`https://api.spotify.com/v1/playlists/${id}`, formData)
             .then(r => r.json())
             .then(data => setPlaylistData(data))
             .catch(err => console.log(err));

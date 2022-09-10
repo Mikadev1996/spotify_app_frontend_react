@@ -7,12 +7,12 @@ const LogIn = () => {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        getUserDetails();
+        if (localStorage.getItem('access_token')) getUserDetails();
     }, [])
 
     const nav = useNavigate();
 
-    const deployUrl = 'https://spotify-playlist-gen-django.azurewebsites.net';
+    const deployUrl = 'https://spotify-django-app.azurewebsites.net';
     const prodUrl = 'http://localhost:8000'
 
     const getUserDetails = () => {
@@ -37,8 +37,7 @@ const LogIn = () => {
 
     const spotifyLogin = (e) => {
         e.preventDefault();
-    
-        fetch(`${deployUrl}/spotify_playlist_gen/get-auth-url`)
+        fetch(`${deployUrl}/spotify/get-auth-url`)
             .then(r => r.json())
             .then(data => window.location.replace(data.url))
             .catch(err => console.log(err))
