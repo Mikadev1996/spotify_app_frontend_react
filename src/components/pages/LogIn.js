@@ -56,7 +56,9 @@ const LogIn = () => {
                     <form className='spotify-container'>
                         <div>
 
-                        <button onClick={(e) => spotifyLogin(e)} className='form-submit' id='spotify-login' type="submit"><img src={logo} alt='logo'/><p>Log In with Spotify</p></button>
+                        <button onClick={(e) => spotifyLogin(e)} className='form-submit' id='spotify-login' type="submit">
+                            <img src={logo} alt='logo'/><p>Log In with Spotify</p>
+                        </button>
                             {error && <small>{error}, please log in again</small>}
                         </div>
                     </form>
